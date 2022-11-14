@@ -1,11 +1,25 @@
 import os
+from pygame.locals import *
 import random
 from ast import main
 import pygame
 
+pygame.init()
 
-TELA_LARGURA = 1920
-TELA_ALTURA = 1080
+TELA_LARGURA = 1000
+TELA_ALTURA = 800            
+'''SCREEN = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
+
+while True:
+    
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+    pygame.display.update()'''
+
+
+
+
 
 IMAGEM_CANO = pygame.image.load(os.path.join('imagens_do_projeto_flappybird_py', 'cano_py.png')) #caminho e imagem
 IMAGEM_CHAO = pygame.image.load(os.path.join('imagens_do_projeto_flappybird_py','chao_gamepy.png'))
@@ -59,7 +73,7 @@ class Passaro:
 
         #angulo do passaro
         if deslocamento < self.y or self.y (self.altura + 50):
-            if self.angulo < self.ROTACAO_PASSARO:
+            if self.angulo < self.ROTACAO_MAXIMA:
                 self.angulo = self.ROTACAO_MAXIMA
             else:
                 if self.angulo > -90:
@@ -135,9 +149,10 @@ class Cano:
         topo_ponto = passaro_mask.overlap(topo_mask, distancia_topo)
         base_ponto = passaro_mask.overlap(base_mask, distancia_base) #verifica se tem dois pixel no mesmo lugar
 
-        if base_ponto or topo_ponto: return True
-
-        else: return False
+        if base_ponto or topo_ponto: 
+            return True
+        else: 
+            return False
      
 
 class Chao:
@@ -180,38 +195,38 @@ def desenhar_tela(tela, passaros, canos, chao, pontos):
 
 #-------------------------------------------- Interaçao Usuário ---------------------------------------------->
 
-    def main():
-        passaros = [passaro(230, 350)]
-        chao = Chao(730)
-        canos = [Cano(700)]
-        tela = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
-        pontos = 0
-        relogio = pygame.time.Clock()
+def main():
+    passaros = [Passaro(230, 350)]
+    chao = Chao(730)
+    canos = [Cano(700)]
+    tela = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
+    pontos = 0
+    relogio = pygame.time.Clock()
 
-        rodando = True
-        while rodando:
-            relogio.tick(59)
+    rodando = True
+    while rodando:
+        relogio.tick(59)
 
-            for evento in pygame.event.get():
-                if evento.type == pygame.QUIT:
-                    rodando = False
-                    pygame.quit()
-                if evento.type == pygame.KEYDOWN: 
-                    if evento.key == pygame.K_SPACE:
-                        for passaro in passaros:
-                            passaro.pular()    
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                rodando = False
+                pygame.quit()
+            if evento.type == pygame.KEYDOWN: 
+                if evento.key == pygame.K_SPACE:
+                    for passaro in passaros:
+                        passaro.pular()    
 
 # Movimentação
 
-            for passaro in passaros():
+            for passaro in passaros:
                 passaro.mover()
-            chao.move()
+            chao.mover()
 
             adicionar_cano = False
             remover_canos = list()
-            for cano in canos():
+            for cano in canos:
                 for i, passaro in enumerate(passaros):
-                    if cano.colidir():
+                    if cano.colidir(passaro):
                         passaros.pop(i) #morreu F
 
                     if not cano.passou and passaro.x > cano.x:
@@ -235,7 +250,7 @@ def desenhar_tela(tela, passaros, canos, chao, pontos):
                         passaros.pop(i)
 
 
-            desenhar(tela, passaros, canos, chao, pontos)
+            desenhar_tela(tela, passaros, canos, chao, pontos)
 
 if __name__=='__main__':
     main()
