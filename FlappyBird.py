@@ -1,14 +1,14 @@
-from ast import main
-import pygame
 import os
 import random
+from ast import main
+import pygame
 
 
-TELA_LARGURA = 1280
-TELA_ALTURA = 720
+TELA_LARGURA = 1920
+TELA_ALTURA = 1080
 
 IMAGEM_CANO = pygame.image.load(os.path.join('imagens_do_projeto_flappybird_py', 'cano_py.png')) #caminho e imagem
-IMAGEM_CHAO = pygame.image.load(os.path.join('imagens_do_projeto_flappybird_py','solo_flappybird_py.png'))
+IMAGEM_CHAO = pygame.image.load(os.path.join('imagens_do_projeto_flappybird_py','chao_gamepy.png'))
 IMAGEM_BACKGROUND = pygame.image.load(os.path.join('imagens_do_projeto_flappybird_py', 'fundo_flappybird_py.png'))
 IMAGENS_PASSARO = [ 
 pygame.image.load(os.path.join('imagens_do_projeto_flappybird_py', 'bird_flappybird_pose1_py.png', )),
