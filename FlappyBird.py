@@ -6,8 +6,8 @@ import pygame
 
 pygame.init()
 
-TELA_LARGURA = 1000
-TELA_ALTURA = 800            
+TELA_LARGURA = 1280
+TELA_ALTURA = 720    
 '''SCREEN = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
 
 while True:
@@ -54,14 +54,14 @@ class Passaro:
         self.imagem = self.IMGS[0]
 
     def pular(self):
-        self.velocidade = -10.5
+        self.velocidade = -5         
         self.tempo = 0
         self.altura = self.y
 
     def mover(self):
         #calcular deslocamento 
-        self.tempo += 0.5
-        deslocamento = 1.5 * (self.tempo * 2) + self.velocidade * self.tempo
+        self.tempo += 0.5 
+        deslocamento = 1 * (self.tempo * 2) + self.velocidade * self.tempo
 
         #limitar deslocamento
         if deslocamento > 16:
@@ -189,15 +189,15 @@ def desenhar_tela(tela, passaros, canos, chao, pontos):
     for cano in canos:
         cano.desenhar(tela)
 
-    texto = FONTE_PONTOS.render(f"Pontuação [{pontos}]", 1, (255, 255, 255))
+    texto = FONTE_PONTOS.render(f"Pontuação ({pontos})", 1, (255, 255, 255))
     tela.blit(texto, (TELA_LARGURA - 10 - texto.get_width(), 10))
     pygame.display.update()
 
 #-------------------------------------------- Interaçao Usuário ---------------------------------------------->
 
 def main():
-    passaros = [Passaro(230, 350)]
-    chao = Chao(730)
+    passaros = [Passaro(200, 200)]
+    chao = Chao(720) #o que era esses valores?
     canos = [Cano(700)]
     tela = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
     pontos = 0
@@ -205,7 +205,7 @@ def main():
 
     rodando = True
     while rodando:
-        relogio.tick(59)
+        relogio.tick(30)
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -218,20 +218,20 @@ def main():
 
 # Movimentação
 
-            for passaro in passaros:
-                passaro.mover()
-            chao.mover()
+        for passaro in passaros:
+            passaro.mover()
+        chao.mover()
 
-            adicionar_cano = False
-            remover_canos = list()
-            for cano in canos:
-                for i, passaro in enumerate(passaros):
-                    if cano.colidir(passaro):
-                        passaros.pop(i) #morreu F
+        adicionar_cano = False
+        remover_canos = list()
+        for cano in canos:
+            for i, passaro in enumerate(passaros):
+                if cano.colidir(passaro):
+                    passaros.pop(i) #morreu F
 
-                    if not cano.passou and passaro.x > cano.x:
-                        cano.passou = True
-                        adicionar_cano = True
+                if not cano.passou and passaro.x > cano.x:
+                    cano.passou = True
+                    adicionar_cano = True
 
             cano.mover()
             if cano.x + cano.CANO_TOPO.get_width() < 0:
